@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajalakshmi Engineering College</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#000; --surface:rgba(255,255,255,0.05); --surface2:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.1); --border2:rgba(255,255,255,0.18);
+  --text:#f5f5f7; --text2:rgba(245,245,247,0.6); --text3:rgba(245,245,247,0.35);
+  --green:#30d158; --green2:#25a244; --red:#ff453a; --yellow:#ffd60a; --blue:#0a84ff;
+  --blur:blur(24px) saturate(180%);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* Aurora */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.18;animation:drift 18s ease-in-out infinite}
+.aurora-blob:nth-child(1){width:600px;height:600px;background:radial-gradient(circle,#30d158,#0a84ff);top:-200px;left:-100px;animation-delay:0s}
+.aurora-blob:nth-child(2){width:500px;height:500px;background:radial-gradient(circle,#0a84ff,#5e5ce6);top:30%;right:-150px;animation-delay:-6s}
+.aurora-blob:nth-child(3){width:400px;height:400px;background:radial-gradient(circle,#30d158,#5e5ce6);bottom:-100px;left:30%;animation-delay:-12s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.05)}66%{transform:translate(-30px,20px) scale(0.95)}}
+
+/* Header */
+header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(0,0,0,0.72);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--border);animation:slideDown 0.6s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#30d158,#0a84ff);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 20px rgba(48,209,88,0.3)}
+.logo-text{font-size:15px;font-weight:600;letter-spacing:-0.3px}
+.logo-text span{color:var(--green)}
+.header-right{display:flex;align-items:center;gap:12px}
+.status-chip{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text2);background:var(--surface);border:1px solid var(--border);padding:5px 12px;border-radius:100px;backdrop-filter:var(--blur);transition:all 0.4s cubic-bezier(0.16,1,0.3,1)}
+.status-chip.online{color:var(--green);border-color:rgba(48,209,88,0.3);background:rgba(48,209,88,0.08)}
+.status-chip.offline{color:var(--yellow);border-color:rgba(255,214,10,0.3);background:rgba(255,214,10,0.06)}
+.status-chip.offline .status-dot{background:var(--yellow);box-shadow:0 0 8px var(--yellow)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);transition:all 0.4s ease}
+.status-chip.online .status-dot{background:var(--green);box-shadow:0 0 8px var(--green);animation:pulseDot 2s ease infinite}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,0.5)}50%{box-shadow:0 0 0 4px rgba(48,209,88,0)}}
+.admin-chip{font-size:12px;font-weight:500;color:var(--text2);background:var(--surface);border:1px solid var(--border);padding:5px 14px;border-radius:100px;cursor:pointer;transition:all 0.25s cubic-bezier(0.16,1,0.3,1)}
+.admin-chip:hover{color:var(--text);background:var(--surface2);border-color:var(--border2);transform:scale(1.03)}
+
+/* Main */
+main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:88px 24px 48px}
+
+/* Nav */
+.nav-wrap{display:flex;justify-content:center;margin-bottom:36px;animation:fadeUp 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both}
+.nav{display:flex;gap:2px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:14px;padding:4px;backdrop-filter:var(--blur)}
+.nav-btn{font-size:13px;font-weight:500;padding:8px 22px;border-radius:10px;border:none;background:transparent;color:var(--text2);cursor:pointer;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);letter-spacing:-0.1px}
+.nav-btn:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.nav-btn.active{background:rgba(255,255,255,0.12);color:var(--text);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.1)}
+
+/* Panels */
+.panel{display:none}
+.panel.active{display:block;animation:panelIn 0.5s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(16px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Grid & Cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media(max-width:720px){.grid2{grid-template-columns:1fr}.nav-btn{padding:8px 14px;font-size:12px}}
+.card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;padding:24px;backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);position:relative;overflow:hidden;transition:border-color 0.3s ease,box-shadow 0.3s ease,transform 0.3s cubic-bezier(0.16,1,0.3,1)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent)}
+.card:hover{border-color:rgba(255,255,255,0.16);box-shadow:0 8px 40px rgba(0,0,0,0.4);transform:translateY(-2px)}
+.card-label{font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);margin-bottom:18px}
+.card-animate{animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both}
+.card-animate:nth-child(1){animation-delay:0.05s}
+.card-animate:nth-child(2){animation-delay:0.15s}
+
+/* Camera */
+.cam-box{position:relative;width:100%;aspect-ratio:4/3;background:#080808;border-radius:14px;overflow:hidden;border:1px solid var(--border);transition:border-color 0.4s ease,box-shadow 0.4s ease}
+.cam-box.scanning{border-color:rgba(48,209,88,0.4);box-shadow:0 0 20px rgba(48,209,88,0.06)}
+video,canvas{width:100%;height:100%;object-fit:cover;display:block}
+.corner{position:absolute;width:22px;height:22px;border-color:rgba(48,209,88,0.6);border-style:solid;transition:all 0.4s cubic-bezier(0.16,1,0.3,1)}
+.corner.tl{top:12px;left:12px;border-width:2px 0 0 2px;border-radius:4px 0 0 0}
+.corner.tr{top:12px;right:12px;border-width:2px 2px 0 0;border-radius:0 4px 0 0}
+.corner.bl{bottom:12px;left:12px;border-width:0 0 2px 2px;border-radius:0 0 0 4px}
+.corner.br{bottom:12px;right:12px;border-width:0 2px 2px 0;border-radius:0 0 4px 0}
+.cam-box.scanning .corner{border-color:var(--green);box-shadow:0 0 8px rgba(48,209,88,0.5)}
+.scan-line{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(48,209,88,0.9),transparent);filter:blur(0.5px);opacity:0;transition:opacity 0.3s;animation:scanMove 2.5s ease-in-out infinite}
+.cam-box.scanning .scan-line{opacity:1}
+@keyframes scanMove{0%{top:15%}50%{top:85%}100%{top:15%}}
+.face-oval{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:130px;border:1px solid rgba(255,255,255,0.1);border-radius:50% 50% 45% 45%;transition:border-color 0.4s ease}
+.cam-box.scanning .face-oval{border-color:rgba(48,209,88,0.2)}
+.cam-status{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:500;color:rgba(255,255,255,0.65);background:rgba(0,0,0,0.65);backdrop-filter:blur(10px);padding:4px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.08);white-space:nowrap}
+
+/* Liveness HUD */
+.liveness-hud{position:absolute;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:14px;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.16,1,0.3,1)}
+.liveness-hud.show{opacity:1;pointer-events:all}
+.live-ring{width:60px;height:60px;border-radius:50%;border:1.5px solid rgba(255,214,10,0.45);display:flex;align-items:center;justify-content:center;animation:ringBreath 1.4s ease-in-out infinite}
+@keyframes ringBreath{0%,100%{box-shadow:0 0 0 0 rgba(255,214,10,0.2);transform:scale(1)}50%{box-shadow:0 0 0 14px rgba(255,214,10,0);transform:scale(1.06)}}
+.live-eye{font-size:22px}
+.live-label{font-size:13px;font-weight:600;color:var(--yellow)}
+.live-sub{font-size:11px;color:rgba(255,255,255,0.45)}
+.live-track{width:120px;height:3px;background:rgba(255,255,255,0.1);border-radius:100px;overflow:hidden}
+.live-fill{height:100%;background:var(--yellow);border-radius:100px;width:0%;transition:width 0.08s linear}
+.live-fill.done{background:var(--green)}
+
+/* Inputs */
+.field-label{font-size:12px;font-weight:500;color:var(--text3);margin-bottom:6px;display:block}
+input[type=text],input[type=password]{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:10px;font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;transition:all 0.25s cubic-bezier(0.16,1,0.3,1)}
+input[type=text]:focus,input[type=password]:focus{border-color:rgba(48,209,88,0.5);background:rgba(255,255,255,0.07);box-shadow:0 0 0 3px rgba(48,209,88,0.1)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;border:none;width:100%;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.25s cubic-bezier(0.16,1,0.3,1);letter-spacing:-0.2px;position:relative;overflow:hidden}
+.btn:active{transform:scale(0.97) !important}
+.btn:disabled{opacity:0.35;cursor:not-allowed;transform:none !important}
+.btn-primary{background:linear-gradient(135deg,var(--green),var(--green2));color:#000;box-shadow:0 2px 16px rgba(48,209,88,0.25)}
+.btn-primary:hover{box-shadow:0 4px 28px rgba(48,209,88,0.4);transform:translateY(-2px)}
+.btn-ghost{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);background:var(--surface2);border-color:var(--border2);transform:translateY(-1px)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(255,69,58,0.2);padding:7px 12px;font-size:12px;width:auto}
+.btn-danger:hover{background:rgba(255,69,58,0.08);transform:translateY(-1px)}
+.btn-warn{background:transparent;color:var(--yellow);border:1px solid rgba(255,214,10,0.2);padding:7px 12px;font-size:12px;width:auto}
+.btn-warn:hover{background:rgba(255,214,10,0.07);transform:translateY(-1px)}
+.btn-row{display:flex;gap:8px;margin-top:12px}
+.spin{width:14px;height:14px;border:2px solid rgba(0,0,0,0.2);border-top-color:currentColor;border-radius:50%;animation:spin 0.6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Results */
+.result{margin-top:16px;border-radius:14px;padding:20px;border:1px solid var(--border);display:none}
+.result.show{display:block;animation:resultIn 0.5s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes resultIn{from{opacity:0;transform:translateY(14px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.result.ok{background:rgba(48,209,88,0.06);border-color:rgba(48,209,88,0.2)}
+.result.fail{background:rgba(255,69,58,0.06);border-color:rgba(255,69,58,0.2)}
+.result.warn{background:rgba(255,214,10,0.06);border-color:rgba(255,214,10,0.2)}
+.result-title{font-size:16px;font-weight:700;letter-spacing:-0.4px;margin-bottom:6px}
+.result-title.ok{color:var(--green)}
+.result-title.fail{color:var(--red)}
+.result-title.warn{color:var(--yellow)}
+.result-body{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* Confidence bar */
+.conf-wrap{margin-top:14px}
+.conf-row{display:flex;justify-content:space-between;font-size:11px;font-weight:500;color:var(--text3);margin-bottom:6px}
+.conf-track-outer{position:relative;height:6px;margin-bottom:4px}
+.conf-track{height:6px;background:rgba(255,255,255,0.07);border-radius:100px;overflow:hidden}
+.conf-fill{height:100%;border-radius:100px;transition:width 1.2s cubic-bezier(0.16,1,0.3,1)}
+.conf-fill.high{background:linear-gradient(90deg,var(--green2),var(--green))}
+.conf-fill.mid{background:linear-gradient(90deg,#c4800a,var(--yellow))}
+.conf-fill.low{background:linear-gradient(90deg,#a32018,var(--red))}
+.threshold-line{position:absolute;top:-3px;left:55%;width:1.5px;height:12px;background:rgba(255,255,255,0.2);border-radius:1px}
+.threshold-tip{position:absolute;top:-17px;left:55%;transform:translateX(-50%);font-size:10px;color:var(--text3);white-space:nowrap}
+
+/* Match list */
+.match-list{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.match-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:9px 12px;transition:background 0.2s,transform 0.2s;animation:fadeUp 0.3s cubic-bezier(0.16,1,0.3,1) both}
+.match-item:hover{background:rgba(255,255,255,0.07);transform:translateX(2px)}
+.avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a4a6e,#30d158);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.match-name{font-size:13px;font-weight:500;flex:1}
+.match-conf{font-size:12px;color:var(--text3)}
+.badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px}
+.badge.ok{background:rgba(48,209,88,0.1);color:var(--green);border:1px solid rgba(48,209,88,0.2)}
+.badge.fail{background:rgba(255,69,58,0.09);color:var(--red);border:1px solid rgba(255,69,58,0.15)}
+.live-badge{display:inline-flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
+.live-badge.ok{background:rgba(48,209,88,0.1);color:var(--green);border:1px solid rgba(48,209,88,0.2)}
+.live-badge.fail{background:rgba(255,214,10,0.1);color:var(--yellow);border:1px solid rgba(255,214,10,0.2)}
+.liveness-info{background:rgba(255,214,10,0.05);border:1px solid rgba(255,214,10,0.12);border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:rgba(255,214,10,0.75);line-height:1.8}
+
+/* Profile card */
+.profile-card{margin-top:16px;background:rgba(48,209,88,0.04);border:1px solid rgba(48,209,88,0.14);border-radius:16px;padding:18px;animation:resultIn 0.5s 0.1s cubic-bezier(0.16,1,0.3,1) both}
+.profile-card-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.profile-avatar-large{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0d4a6e,#30d158);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;border:1.5px solid rgba(48,209,88,0.3);flex-shrink:0}
+.profile-name{font-size:16px;font-weight:700;letter-spacing:-0.4px;color:var(--green)}
+.profile-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.profile-field{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px 12px;transition:background 0.2s,transform 0.2s}
+.profile-field:hover{background:rgba(255,255,255,0.07);transform:translateY(-1px)}
+.profile-field-label{font-size:10px;font-weight:600;letter-spacing:0.5px;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.profile-field-value{font-size:13px;font-weight:500;color:var(--text)}
+
+/* Users table */
+.users-table{width:100%;border-collapse:collapse}
+.users-table th{text-align:left;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--text3);padding:10px 14px;border-bottom:1px solid var(--border)}
+.users-table td{padding:12px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:middle}
+.users-table tr:last-child td{border-bottom:none}
+.users-table tbody tr{transition:background 0.2s}
+.users-table tbody tr:hover td{background:rgba(255,255,255,0.025)}
+.user-cell{display:flex;align-items:center;gap:10px}
+.blocked-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:rgba(255,69,58,0.1);color:var(--red);border:1px solid rgba(255,69,58,0.18)}
+.no-data{text-align:center;padding:48px;color:var(--text3);font-size:13px}
+.section-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+
+/* Profile editor */
+.profile-editor{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:18px;animation:resultIn 0.35s cubic-bezier(0.16,1,0.3,1)}
+.profile-editor-title{font-size:11px;font-weight:600;letter-spacing:0.5px;color:var(--blue);text-transform:uppercase;margin-bottom:14px}
+.profile-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.profile-form-grid input{margin-bottom:0}
+
+/* Logs */
+.log-list{display:flex;flex-direction:column;gap:5px;max-height:520px;overflow-y:auto}
+.log-list::-webkit-scrollbar{width:3px}
+.log-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.log-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 12px;font-size:13px;transition:background 0.2s,transform 0.2s;animation:fadeUp 0.3s cubic-bezier(0.16,1,0.3,1) both}
+.log-item:hover{background:rgba(255,255,255,0.06);transform:translateX(2px)}
+.log-type{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;min-width:96px;text-align:center;letter-spacing:0.3px}
+.log-type.GRANT{background:rgba(48,209,88,0.1);color:var(--green)}
+.log-type.DENY{background:rgba(255,69,58,0.1);color:var(--red)}
+.log-type.BLOCK{background:rgba(255,214,10,0.1);color:var(--yellow)}
+.log-type.REG{background:rgba(10,132,255,0.1);color:var(--blue)}
+.log-type.DEL{background:rgba(255,69,58,0.07);color:var(--red)}
+.log-user{font-size:13px;font-weight:500;flex:1}
+.log-time{color:var(--text3);font-size:11px}
+
+/* Admin modal */
+.admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:200;display:none;align-items:center;justify-content:center}
+.admin-overlay.show{display:flex;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.admin-modal{background:rgba(16,16,18,0.96);border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:36px;width:360px;position:relative;animation:modalIn 0.5s cubic-bezier(0.16,1,0.3,1);box-shadow:0 40px 80px rgba(0,0,0,0.8)}
+@keyframes modalIn{from{opacity:0;transform:scale(0.92) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.admin-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);border-radius:24px 24px 0 0}
+.admin-title{font-size:18px;font-weight:700;letter-spacing:-0.5px;margin-bottom:24px}
+.admin-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.admin-close:hover{background:rgba(255,255,255,0.14);color:var(--text)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="aurora">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
+
+<header>
+  <div class="logo">
+    <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGJATMDASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAcIAwYBAgUE/8QAQxAAAQMDAQMFDQcDBAIDAAAAAAECAwQFEQYHEiEUMVFUkQgTFyI0NTdBUmFyc4EVFjJTVXGSIzOhQkNisSRjJifB/8QAHAEBAAEFAQEAAAAAAAAAAAAAAAYBAgQFBwMI/8QAPhEAAQMDAAYEDAYDAAIDAAAAAAECAwQFEQYHEiExMhNBUZEUIjM1UlRhcXKBobIVFheSsdFCU8Fi8ILC4f/aAAwDAQACEQMRAD8AuWAAAAdKhVbA9yc6NXBRy4TJVEyuDuCM7ne7uyrc2OqVG55j5/ty9dcUhEunVLG9WdE5ce43TbHK5EXaQlQEWfbl664o+3L11xTz/PtL/pf9P7LvwGX0kJTBFn25euuKPty9dcUfn2l/0v8Ap/Y/AZfSQlMEWfbl664o+3L11xR+faX/AEv+n9j8Bl9JCUwRZ9uXrrij7cvXXFH59pf9L/p/Y/AZfSQlMEWfbl664o+3L11xR+faX/S/6f2PwGX0kJTBFn25euuKPty9dcUfn2l/0v8Ap/Y/AZfSQlMEWfbl664o+3L11xR+faX/AEv+n9j8Bl9JCUwRYl8vWfLFPph1Fc2L/Ule49YtOqJ64cxzffgtdY5k4OQkoGhwatli/ute76H3wa2pVVGvgei9JsodLbVIuFlRF9pjPtNU3g3JtoPNoLzSVaJh7WZ6VPQZJG/8D2u/Zcm/hqYpm7UbkVDAfE9i4cmDsAD2LAAAAAAAAAAAAAAAAAAAAAAY6ryaT4VMhjqvJpPhUsk5VLm8yEV1zUdXvRfepW/Vu1nU1v1VX26lhjdFBIrW5TjgsjWecX/UpvrRf/sG7/NcRLVpbaO4XWsZVxo9GtRURepck3cqpGiobJ4Y9X9WjHhj1f1aM0vK9IyvSdk/K9k9UZ3Hh0rjdPDHq/q0Y8Mer+rRml5XpGV6R+V7J6ozuHSuN08Mer+rRjwx6v6tGaXlekZXpH5XsnqjO4dK43Twx6v6tGPDHq/q0ZpeV6RlekfleyeqM7h0rjdPDHq/q0Y8Mer+rRml5XpGV6R+V7J6ozuHSuN08Mer+rRjwx6v6tGaXlekZXpH5XsnqjO4dK43Twx6v6tGPDHq/q0ZpeV6RlekfleyeqM7h0rjdmbZNXtcjuTR8D7KTbfqtJUSejh3enBHuV6ThePOeUuiNhlTD6Rn1HSuJrt22ZHo1a5I2dPA2O27WdITq1tVXIx682CtzoY3JhzcnTklMi5SPinvNDV6srBUIuy1WfDj/pe2ZyFwbZfbVdER1BWq7PNh2DYqG7V9vwsTt9PeuSlEFzvlIqcguD4ETmRFN40ntZuVl73HdVlrfUq5IRcNVVfRKs1qnyvZ/l/ResjJE2XpkuLZdXRyoiXBWxu9yG0UtTDUxpJC9HNX1ld9J65supIGyLLFTSL/AKHO4m8Wy7VdC9skcznwJxwnMqEfp9JbhapvBrrGqY6+v59S/I1tTaI5U2oVwvYSqDxLHqGmuTURcRu6FU9sntJWQ1caSwuyikelhfC7ZemFAAMk8gAAAAAAAAAAAAAAAY6ryaT4VMhjqvJpPhUsk5VLm8yEWVnnF/1Kba09IN3+a4uTWecX/UptrT0g3f5riPap/O9b8KfcTZ/kkPPAB3QxQAAAAAAAAAAAA5Ua1XLzIdIZmTJlqKn7ofRbHsbqGgZKzfhdKm+1eZUJi1zsvp7xbm3eyObA3cRe9RoaS66QUdpnihq12Uk4O6kXsX3no1mUIYBzVQVNvqn0dfC6BzF3Wq7hvHBu0VFRHIuUUsVMAAAoAAABhF50RQADiBZaWqSqp5pGvbzIjuBKOzva5W0kraHUTmtp0w1ionHBF51kjZJhXtRVTmXoNXd7LQ3iFYaxiOTqXrT3F7Xq1coXGsd0pLnTMuNrm3o15uJvumNTpIqUtwcjX8zPeUc0VrW66SuTJ1lkqKTOO8Z4IWW0nqOg1Jb46ujmYk+6iq1q8WqcEvej1z0Mn8Ipl24FXj/xfb7eB6SwxVbNl/HtJ7a5HNRUXKKcmlaP1AqOShrHYx/rd6zdGqjmo5Fyi8xLLVdYLnAk0S+9OxSJ1VK+mfsOOQAbMxgAAAAAAAAAAAAY6ryaT4VMhjqvJpPhUsk5VLm8yEWVnnF/1Kba09IN3+a4uTWecX/UptrT0g3f5riPap/O9b8KfcTZ/kkPPAB3QxQAAAAAAAAAAADhJO8zxz+wuS0Wx24faOio6nO9xxxKs1nksnTulj+5zRybOGb35inMdbMDH2Rki8Ue1O/J7wcxl2q7P6DUdvkrYIsVkTVVmOHErjVU9Vbq59uuDVbUsXjw9Rc1q4XjxT1oQ5t70a1aN1/t8O9O5cOY1OOCLauNMpIJm2usdljtzFXqXs9x6TR9aEKA6Qu3k3V/G3g5OhTud4VMGKAAUKAAAAAAA9TRmo6/SV1ZUUkjuSOdmdF6DyzhzUc1WuTLV50PKeniqYnQzN2mO3KilUXBbbSWoKLU9nhuNFJz8cZ45JQ0bfVniSlrH4kTgz9ijmzHVVTpLULZXyOfSPXcSJV8VMlp7TcWyw090pH7281HqiLzHzrf7PPoXdUmhysD+Hu7F9qHrPCyri2F49RM4PL05cW19vjerk75jxkPUJxTVDKiJssa5RUyQ6SN0bla7igAB7lgAAAAAAAAAMdV5NJ8KmQx1Xk0nwqWScqlzeZCLKzzi/6lNtaekG7/ADXFyazzi/6lNtaekG7/ADXEe1T+d634U+4mz/JIeeADuhigAAAAAAA4c5rG7z1w3pBUKvjNYiKrnLhMGSohkppEjmRUcqZRFNy2N6Rn1LeHzVcasp4VR0blTg4+XbnCy3a5ih3EijbGiYRDTMvUEl3/AAuNcvRquX2diF2xuypqTUSSugpsZ767BarZbbVtOkIqVW7vrwQbsi0PWahvMdyrYnQ09O5HxuxweWX3WsYxkaI1rWomEOU62L5FKsdsidlWrtOx1L1IZEDP8gYq2mhraOannajmqxcIvSZTlOc40jnMVHNXCoZHEqJrWzzae1HURTphs8iqz9snmKS53Sll77cqOuhbhGNy7BETXbzcn1voxdfxa0wVS8ypv96bjAkTC4OQAb08wAAAAAAAADpNG2Vqb3O3i39yZNgOspEY6zXaXeke7dh9yEPGW11slpvdPdY3qiQKi46TS6RWWK926SkkTeqZb7FTh9S9jlauS7+mbktsuOJXZY/ghJcbkfG16cypkgTRN4ZftN0l0Ryb7sKqEwaPuK19vy5eLOBwnRGrlpZ5LZUL4zVXHvTiYF5pkVqTt+Z7gAOgEdAAAAAAAAABjqvJpPhUyGOq8mk+FSyTlUubzIRZWecX/UptrT0g3f5ri5NZ5xf9Sm2tPSDd/muI9qn871vwp9xNn+SQ88AHdDFAAAAAABns1ulvl8hs8LVV0qp43qPneviqifiVPF/cmbuetKq6ldeq+Hcnjf4mU50NHpHe47JbpKx3FNzfiXgXsarlwSfoixQaesNNSxxo2djUR69J82p9Ead1LVpV3WkSWZOZxsb13nKpwfKrbrWNqnVrJFbI7OVRd+/q9xn7KYwfNarfSWqijo6GJI42JhERD6HyQRpmaeOL43YMdfUNordPXP8AwwtVyldtR36+7RNSPttoWRlPzb0S45jdaPaOT6QSyyyS7EbN73u34LHvRm4sYyalk/s1cMi9DXIp29ZWZ1PqnZtdKeeqfPLA52XrI5VRELB6Nvceo9Pw3WNUw/hwPXSPRN1nhZVQTJNA/cj07ewRy7S4Na23UiTaUqanHGONeJWW3OV9KirxXKlrNriIugLkv/rUqfQSNjom7y8XOVGp0qdb1TSuks0jPRfhO48Z0wp9mURcKqIvQDcbRs6uFboyr1DWRyRVUKZgj9T0NMZ31qblQ3cmT8Teg6BSXGlrHSNp3o5Y12Xe/wD6eLmK07AAzCwAAAAAAHWaNJYljX1nYIVRcLlCpMHc56i79XSWF7lRkLPFRSxWjK1ae6Mo0XDXqUt0DdUsGpY6rf3e/PRn+S3Non72+jrUXnYjsnz/AKw6JbTpBDXxbmyY+nN3nurUlhdGpL4Pmtc3KKGKbOd5Mn0ksjekjEenBSFuarVVFAALy0AAAAAAGOq8mk+FTIY6ryaT4VLJOVS5vMhFlZ5xf9Sm2tPSDd/muLk1nnF/1Kba09IN3+a4j2qfzvW/Cn3E2f5JDzwAd0MUAAAABXI1MrzAGez2+e73ilp6bOWSpv46Mlu7HQw22009PC1G5jTex04IG7nKyST6oqqyqi/obmWKvrUsKvDxU5k4IcC1sXjwivZb2L4saZX2qv8ARmQNwmTgAHJzIPj1BTOrdOV9ExfHmiVqdhXLQVxk2a6zfHdKZ72ZVd/HAsyi4XJqG0nRtDqK1SSLGjZ0TOWpxJvodfqWiSa21zcwVGEdjii8DxlYqplCKdseu6TW0tLbbfC5jpPFRVJa2P2iax6Dp6CdcyIu8q/uVfZu23VPOq8jkxx9xa/QFzS76UgrUxheHAmWsS2R2exU1DRNxAjs7965XOPoecPN7Tz9rz3poS4Rxxuke6NcNbzqQ7sa2a1N1fHc7tHilRd5kT0wqL0lipoIp+ErUc3oXmU7xsiijSOGNsbU9TUwQi0aZVFntMlBSNw965V3ZuxuPZ0e07KnWOjplom29GJ3lG7u6VW2m2eW061rZFTdp3O8RPUWtauFyQv3TVqVLXSVkDMuc/xlQ22rC7Ppb14O5d0yY+fHJZM1FTJDPvBwxfEanrROJyfRphgAAoAAAAAAYpWK6rpHIuN2VF/yW20bXLX6bgdvbyxxtb/gqZJ6n+zxLFdz9cEuOkZ3I7Pe3bpy3W5R9NZm1HoLj9xkU7lR6IWP0hOklnhZ62tPZNS0DOr2uj9lDbTVWKfpqCJ3sx3EVr4+jqHIAAbcwwAAAAAAY6ryaT4VMhjqvJpPhUsk5VLm8yEWVnnF/wBSm2tPSDd/muLk1nnF/wBSm2tPSDd/muI9qn871vwp9xNn+SQ88AHdDFAAABguC7tG5UM50fFyhUp15nKhcxURyKpUsfsHoUh0hS1uOMjeckFec13ZfTtpdAW+BqcGtNiPkLSOqWqu1TIvpqnyRdxsGY2dwOd1ehTzdRXu32CiWquMm4xUy0jKfbbaG1ve2PesKLhV3S+06M3S7sWSjiVzU6+r5B0jW8SXjs1EVkiLzKxUPE0nqa1ampO+22Xfc1MvRfUe3HxR/uappqymmpXuhmarXN4ovFC5FRUyhUXadb0t9/r3tTHfZFX/ACT13P0yybOKZi8VRSENr1UyrvtVHEuXMkVF7ScdgMKwbMopHphzUVx3jWFIrtEqZ0vNtM+0xIV8ZTbb5erbZYFkraqKN2Mo1zsKp4do2hWG41XeEqoY15kVXJxIR1NNW7QNo0Nvmkc2milWN2FxwybDtL2R2/TtkjuNoqJuURrvLl5GodDLJSJT0dynVKmdMphNzezJesrl3pwQndrmPYj43I9ruKKhp+2KibW6bw9M7iKp5Hc96hrr7pupbcFy+mduNX3GzbSd37tTb35a/wDREqegmsmkjKVy5dG/GT0cu0wqjGv9SVEXOHqh3Pno/wC7U/MU+g+rXJhTCcmFwAAWloAAAAABxL/Zf8Kk39y2/Gma1nTKpCEn9p/wqTT3L/mKr+YQjWOxH6OTIvpN/k94OYsds4cvLahvQhvRoWzbzjU/sb6c80McrrSxV7V/kj14TFUvyAAJUasAAAAAAGOq8mk+FTIY6ryaT4VLJOVS5vMhFlZ5xf8AUptrT0g3f5ri5NZ5xf8AUptrT0g3f5riPap/O9b8KfcTZ/kkPPAB3QxQAAAInpFUskcuGovFQYLimaJ2OlC5rUcuyvWVLbbOJGzaGoZGLlFae+xMuNF2HXCKp0JRUTXZkjbxTJvPMp8e3+mfTXOpiduXbd3Ku42LOBBfdFVlTJX22idI6OB8yNVV5sG32rQGk36QRHxUznuZvLNhOC4Po2zaThv1k5U1v9Slasmf2IBo9YandRvs1NP/AEd7dx0HXrBSz3+w08Vtn6FYXeOnDr4mM7xXKqm7bFqia3a5udvpJFkp2ybqbvNjJNuuL7T6esL62R7UcrcYVTStjGjPsCgkv1yRN+du+qkZ7cNV1N21G+gZLm3cyInSYNXbKfS7ShGwLmOJE23ekqYynvKtcrWe81OnSS764RURZGVc+foqlstJWxto0223o3CIzm+hD2wPQ8j3Oul0j8WNUdTr7id1dvNe7mww12tO/RVVQy2065ZFjPv6voXQs/yUq5tEdJpXXUVwolVv9RXq1vDe4mTUu0K+62ggs1DSTd8VyI7d4rgw7Z6uCs1Ej4lRVicqKbd3ONnSO+y3R8aKkjMIqpwOj1ctJRWOK71cKPmiZ4ue3qQ8m4VdkkTZFpVdJ6dWGR29JUIj3dKKYNtdyjtummLI5G99y1Mm9Im/KqcyEAd0dfo7nJFZoX5fTSeMiKce0VZUaRaTsqZ96qu0/wBiHu9EazZIrjaiPkciYRzlU7nDeDGp0Icn04phAAFCgAAAAABxL/Zf8Kk3dy3HnTVa/olUhCReCM9rgWH7nq3pbtI1DcKnfH7xz/WfOkWjsjetXN/k94OYnHZwn/nVC450N6NR0BBuI+TH4kNuIZopCsNsY1faveRy6uR1S5UAAJGa0AAAAAAGOq8mk+FTIY6ryaT4VLJOVS5vMhFlZ5xf9Sm2tPSDd/muLk1nnF/1Kba09IN3+a4j2qfzvW/Cn3E2f5JDzwAd0MUAAAHDmo5u6vMpyAVN82G6qbY9QyU9dLuQSJux7y8MlkWq2SNkrFy16byKUvmZvOZIiqj413mqnSTLsk2pNRI7Lf3q6oXxY3epEOQ6x9DZa134pRNy5E8dqdaJ1p/0yYZETcpKus1cmmK/dX/Zd/0U7p6h1JJNUN4qk/8A+lzL33mt0xXrDKx6Pgdu4XPqKdT0T4Z6inqGqirKqp2jU7K3weqidxRzcp3iowpaijuHfdj6Ttdl/I8/twKr0kUt4rNyR6q5ZudejJMmybUjLno68WaokRHRQKyJHL7iHESpstb43CTv3+Mm90GtTrVV3Gmxh+2ip7UVFXcWPXKJguDpKlZS6Xt0MbUbiJEVU9fA1badtBodNUMlNTSMnrHIrVjReKZPUo7yx2y77RpZEdNBS7yo1cqi4KtXa4SXq6yXWqVyzyOVvE53oTog29XGonrs7MT1RU7VzlM+zB6vk2W4QxSJU3a6ys3nPmrH7zW+tMqWj2SWF1l0hSxzMVtTjxspxND2DaFpXxvu95Rj52KjoFzzIbxtA2h2jS9LJG56STqm6zc44U3Ont5nvlU2w2tiu2FTaxw4fxgtjRG+Mqn07S9WUml7HO/vreWq3MceeKlXa+tnu90mu1Qqo+ZcqxfUfTqK+XTU1zdXXWZZML/S48zT4yeaG6Jx6O0mHeNM7mX/AInsPOWTaUAAmB4gAAAAAAAIAY5H7tXStxnekRP8lstE0K0GmoW7u73xiOKy6JtSX7UcVKjVcsL0d/kt5aadJEo6JE5o0bg4xrerdttNb2cXKufpgyoMNy5eokbR8CR2eGT1uae0fLaYeT2+KHGN1D6jLt8PQUscfYifwQ2oftyud7QADMPEAAAAAAGOq8mk+FTIY6ryaT4VLJOVS5vMhFlZ5xf9Sm2tPSDd/muLk1nnF/1Kba09IN3+a4j2qfzvW/Cn3E2f5JDzwAd0MUAAAAHSZ+43Kc5VEyuCp1fVU7HK1z8KnOYpKmmd40cve5PU9E4oTzofZlYbxpOkuVTStdNKmXL0nr+CHTXU2kDn1k2OmmfC/a2mqqLw4pxPZIV4oQppfaJctPRPhbM+sY9uFR7lweTe75Bd7hy17Ugd62ohYLwQ6b6m048EOmuptNdFrA0XhndURsVHu4qiJv8A+FeicpXeiuzaGpbNTTuZhcua3/V+5kvF4prpW8rkRGLjG7gsJ4IdNdTaPBDprqbTI/UvR7pOkw7a4Z3DoXEMbP8AXs2nEntkj+U0VYu7Ir14MQ8jVVVbHX976GVq0/Om6nDJPy7IdNYxyNoTZBppEwlG0xYtP9Goap9VGjkc/mxjf7V9pVY3rxIWpNo1fQ2iW10yuayRMd8ReKGsPrEnmWWsrH1Crxw/KlkfBDpvqbTjwQ6a6m09afWHozTOc6FitV29VwmVKdE7gVy5ZS8yP/wd4p4pVxG7Kli02Qaa6m00Lbboy1aRs9JVW6BI3yv3VVDbWzT6z3OrZR0+1tvXCZwWrCqIRqA3i1F6UBMzxAAAAAAB1lekUayLzIdjvQUj7pd4LVG1VdOuMoFc1iK5/BN6+5OJVEySx3OenVjukt8kTejlZ4uU4FjtG0S1F1jqkTLWLg0bQdlbYdMUltVqd9TCKqEw6Lty0NvXvieM/ih821NSukukz6ld8bF3f/HlX5ium8HplTrU98AHQiIAAAAAAAAAAx1Xk0nwqZDHVeTSfCpZJyqXN5kIsrPOL/qU21p6Qbv81xcms84v+pTbWnpBu/zXEe1T+d634U+4mz/JIeeADuhigAAAxVDVc3ghlBVq4XJUsfs21dpyh0PQ0lXXtjmY3DmqvMbB9+NKfqbO0qeqyZ8V6on7namZUVNS2micqyO5kReJyms1UW+onkqHVD02lVy8MJneeyTORMFrvvxpT9TZ2j78aU/U2dpWdNMX5eaCdfoo+7F+/In/AIqa79LrJ66ve0eEOLMffjSn6mztH340p+ps7Ss/3Yv35E/8VH3Yv35E/wDFR+l1k9dXvaPCHFmPvxpT9TZ2j78aU/U2dpWf7sX78if+Kj7sX78if+Kj9LrJ66ve0eEOLMffjSn6mztH340p+ps7Ss/3Yv35E/8AFTpNp29wsV8kMyNRMqqooTVbZVXCVju9o8IcWb+/GlP1NnaRf3R9/tF70/QQ2uqSeRkmXInqQh5Hyq5zd9ctXC8TlFev43ZQ31k1aUVor4q6OZznMXKIuMLuCzOXiGf22p7jkA6QeAAAAACqjU3lXCJzqAdZZGxt8Zcb3BP3Jc7n/R8lQ595ucKxvidmLKc6GibOdL1Grb+2mSNyU8ao7vip4q4LUWe2R0tNT2yjYjXI1GqqIct1laVJQ034ZSrmWTjjqTs+fAyIWZ3rwPc03b3XK44c3DGcUJLjajI2sTmamDy9M21tBb40c1O+qnjKesR7Rm0JbaRNrndvX+vkRq5VfhEu7gnAAAkZrgAAAAAAAAAY6ryaT4VMhjqvJpPhUsk5VLm8yEWVnnF/1Kba09IN3+a4uTWecX/UptrT0g3f5riPap/O9b8KfcTZ/kkPPAB3QxQAAAAAAfdpSoZQ6rpq6TCtYvMvMfCfPcHOZTb7F3XIqcULXwpOx0S8HJjvKouF3FybFLTVdkp6tKaFUkbn8KH2bsHVYv4oarslrUq9CW5iu3ntjTJtR8cXSkWlrpoXf4uVOvhncbFqbhuwdVi/ig3YOqxfxQAwdlP/AFSuBuwdVi/ig3YOqxfxQAbKf+qMDdg6rF/FDUtrVwprTphZlgib3zLc7ptzUyuCHu6auCu05T0kaqjmyJnBJtDbf4dfKaLq2t/uLJeUg9iJyieRF4PerjudYv7LOnHE7H1kvEwFXIABQoADh72s/E5EVeZF9YRMg5PQ0pYa/Vd0ZR0MTnUu9uzux+FD6NJaSu2q7kykgjkp4c5WZU4KhZfRmlrdpe2x09LAzlCtw9zU4uUg+mOm1No/CscSo6deCdntX/h7RxK450Vpuh0pZIbfSsRzk/1qnjKpKOjLE5jErKxmH5yz9j5NI6fdPIlbWNyxeZjk5jeWNRjUa1MIiYRDk+j1nqKyoW6XBcudvRF9vWv/AA1t0uCNToIvmpyADoBHQAAAAAAAAAAAAY6ryaT4VMhjqvJpPhUsk5VLm8yEWVnnF/1Kba09IN3+a4uTWecX/UptrT0g3f5riPap/O9b8KfcTZ/kkPPAB3QxQAAAAAAY6mPvsSsMgKouFyVJ07nS6srIZbc1+Vp2cUUlzcXK8UKjaQ1LPpOpmq6fOZU44Nh8M1w/Kf8AyOLaU6uLjc7rLVUeNh2O/rMmOXZTBZfc96Dc96FaPDNcPy3/AMh4Zrh+W/8AkR/9Jr57C/p07Cy+570G570K0eGa4flv/kPDNcPy3/yH6TXz2Dp07CzUTP6icU7StW3S8JV6tqLSjs96XPuMabZLi5d1I3oq+veNPvNY+63eW6TIvfZOfPOTHQjQOtsdwdVVuMbOEx25PKWRHIfMnBEToAB1cxwAetpDT33ouaUnKuTbrsZ6TyqJ46aJ00q4a3eqlUTJ40TnVFSlLAxzpV5uBJOzzZRcrpUNq9QxKynTjHhedCVtH7OrPp+BnKYIqqbGd9U4m92+21VU5sEMDo4l4IqJwRDi+kGs+WpVaWysXfu2+v5dnzMhsbWptPXCHk2G00Voo2W63RJupzLjib1pfS7t9Ku4N8ZOLEPWsOm6e3sRZd2V/SqHvoiImE5kNBZtFXLJ4XcV2nrvwu/f7e1TTV12ynRwcO04a1rWo1qIiJ0HIBPDQgAAAAAAAAAAAAAAAx1Xk0nwqZDHVeTSfCpZJyqXN5kIsrPOL/qU21p6Qbv81xcms84v+pTbWnpBu/zXEe1T+d634U+4mz/JIeeADuhigAAAAAAAAGe1JSyXilpa5FWKeRGrjoVSwLNjGi3wRSNhk8diOXiV2YmLlST+qKRHL2libHtOtEVqjZVVMaPY1E4qc31hsvbUgktL3JxRyNXuPeJW9Zz4F9Gfkydo8C+jPyZO0+jwraf65D/IeFbT/XIf5HNek049KXvU98xnz+BfRn5MnaPAvoz8mTtPo8K2n+uQ/wAjlNqun1XyyH+Q6TTj0pe9RmM17W2yzR9k0rW3KCJ6VELN5iqvrIJpZe/Q989+CbNqWvaC72SWhop2PSVmF3VITpI+9Qoz3nXNAmXRLc990e50iu3bS5VEwY8qtVdxlABNjxB9NjuNRatQUMtO7da6VN/9snzGOoT+k56fjamWlr42ysWN6ZRyKneVTiXHt1bFcbZBU07t5N1uVTpJX0vJA+2RNjxvI1N4q/3O99Wo0z9nVMm9PvLjK8cE9aAru8TywTP/ABLhqKfNNFT/AJe0iloX8FVURfZxRfmW3OJZ6bKcUN8AB0giQAAAAAAAAAAAAAAAAAAMdV5NJ8KmQx1Xk0nwqWScqlzeZCLKzzi/6lNtaekG7/NcXJrPOL/qU21p6Qbv81xHtU/net+FPuJs/wAkh54AO6GKAAAAAAAAAOfh0n16QtFLeNVxW6oRytf7z5EPU0A90WuaeVOCJ6zHrXvZSSujXDkauPeXs4kwxbFbG6Jru8rx/wCR28Clj/JX+RKNA9X22B+V4tM28vSp8wv070gR7k8IXcqmYkTcEUeBSx/kr/I+G/bH7JQ219Q2JUVrVX8RMu8vSpr+0WdYdNSOVcZRUMy26a3+esiiWoXDlRC18bUTJUtsMUNfUwx5xG9UTKmY6vajbjVORc7z1U7H02qqqIq9ifwYjuIABQtA5+cAA2jZJd5bTrmF8km7S44pktTa6pHVNNWxO/puVHFKat8scbXwKrXo5OKFp9l16jvGk6aBj0dNBEiP48Ti+tm0K3obtGm9Nzsdib071MmBcorV6yw1vqW1VK2Vi5RUPoNU0DXtdQto3Oy9FybWe9qrUrqRk6cVTf7yIVcCwSuYAAbExwAAAAAAAAAAAAAAAY6ryaT4VMhjqvJpPhUsk5VLm8yEWVnnF/1Kba09IN3+a4uTWecX/UptrT0g3f5riPap/O9b8KfcTZ/kkPPAB3QxQAAAAAAAAAh9umpe86gifzcUPiEc/Jalk68ERycS2RnSMcztTBUuDYHb9go39LEPsPM0dIk2j7bKnHeiRT0z4zqm7NTK1epzv5U2LeCA0/bNOlPo5X9K4NwI57o6odT6BY5nOsiIbfRWLpr5SM7XoWyb2qV2TjPI/pU7HSDjCx687kydz64duXBgAAFCgAAAwi85JPc831bZc6mkq5UxO7DEVSNjJbZ5KPUNBVscrWxSI52F95q73bGXW3y0j+Dk+qb0+pexcKXd0vVJQ3dsr1wxUJNiekkTXpzOTJBmnbo292WC4QuynBMoS7pa4srre1rVysbURTgGhtU+mllt025zV+vWnyMC9QbSNmb8z2AAdDI6AAAAAAAAAAAAAAADHVeTSfCpkMdV5NJ8KlknKpc3mQiys84v+pTbWnpBu/zXFyazzi/6lNtaekG7/NcR7VP53rfhT7ibP8kh54AO6GKAAAAAAAAAD5bp5KnxIfUfNdPJU+JD0h50KpxLcbOJEfoS1InqhQ941TZPIr9G0LV9USG1nxze4uiuU7P/ACd/KmxauUOU5yKe6Yl/+GRxZ/3EJWb+JCGu6UlzZGwr6nob3QGLpNIKb2LkpJykJ03k0Xwnc6U/k8af8TufUzuKmvAAKFAAAAdJ0VYHo38WOB3OU5yqLhclScO551Aj7SywyyZmRVXnJ+0NXJRVb6Z3+47CFK9ml4+7+tWXCV6tjXxfdxLZ2ira9KO5td4rkR5896e0DrHpBHcIk8WTf815voe7mJPC6NSYgfJaKtK2gjqGrlHH1kvikbKxHtXcu8hb2qxytXqAAPQtAAAAAAAAAAAABjqvJpPhUyGOq8mk+FSyTlUubzIRZWecX/UptrT0g3f5ri5NZ5xf9Sm2tPSDd/muI9qn871vwp9xNn+SQ88AHdDFAAAAAAAAABgrmb8CNT2kM50nTMaJ7y5i4cilU3KWX2Kyq/TcMauzuRobypGmwKdJrZJGi5VrCSz5M0wi6K91Dfb/ACZ0S5ado/xoQd3RMyPV0C8cOJxi/uNQr13QFTvailps8xu9WcXSX5vsaq/UtnXxSNI+ETU9xycN4NRPccn0uvEwwAChQAAAAAAw1bHPbGrOCtcilndj9/ZftNtpkeiupWI1eJWj1Kb5sJv7LDevs571Rax+ERSE6wbJ+LWV6NTx496f9+h7Qv2XIXE0Dcd5iW9f9KZNwIrs1WltubZs43sISjTv75Ax/tNRTmuhty8KouicvjM3fLqNFeKfo5ttOC/ydwATA1AAAAAAAAAAAAAMdV5NJ8KmQx1Xk0nwqWScqlzeZCLKzzi/6lNtaekG7/NcXJrPOL/qU21p6Qbv81xHtU/net+FPuJs/wAkh54AO6GKAAAAAAAAADhybyYOTlAVJn7mKr5Q+4w5/toTKQL3K8m5dLqmedCelPmLWRCkWkk+OCo3+DOhTxTvDwlavvK17fKOoj1tPWvRyQKmEVeYsii4XKEd7etPOu+lN+lYi1DXZVceot1e3RltvkbpOEibGezPWJW5aV2bxaipzKDrG10arA/8cfiqdj6gUwQAChQAAAAAAHegmWivdLckdhIHI46HSdnfYXR9IVqORWu4LuX3KVRcFttFXZt+0zTXFHI5Vx/gl/RlwWuoFRV4x8CqPc7ajjfImmt5cxtVcKWH0bXcjuLaTOEkcfNclOujek0lM7cx67vcvKK+Hwim3cUJFAB0QiAAAAAAAAAAAAAMdV5NJ8KmQx1Xk0nwqWScqlzeZCLKzzi/6lNtaekG7/NcXJrPOL/qU21p6Qbv81xHtU/net+FPuJs/wAkh54AO6GKAAAAAAAAADlDg5QAkXuapFjvVemcZUsQ71fsVq2BvWnv8+V/G4ss/wD0/sfOetWPZvu36SJ9EM6Fd2Drz8E5zrUwsnpZoJmIu8xUwpmoER1ygYv4VdxPX1PbFo38qamIlwQCGklkgfUx/wCCpn+clXytbIka9ZS/Xdjk05qOoZKq4qZFcxF6Mnjk490LptLhTx3mJnCmZl2CCqaVJoUkT9j6o0TvSXm0xVKr42MO9ip/+GJI3ZUyAAkZ5gAAAAAAJzgAHqaHuy6d1NHcEdjvjkb2ltbVWI6lo7lG7LlYjimU8aP3HL/tu3ix+wzUbNQaelhc7xqdEYiKci1s2dZaaO5xJ40a4X/69xkwOyuypZbT9Wtba4p1XxnJxPvNL0DcFdK6icvBicDdDFsdeldQslRcrjC+9OJE66BYJ3NAANuYgAAAAAAAAAMdV5NJ8KmQx1Xk0nwqWScqlzeZCLKzzi/6lNtaekG7/NcXJrPOL/qU21p6Qbv81xHtU/net+FPuJs/ySHngA7oYoAAAAAAAAAAABtWySfvGo42rw3pELSv5mfChUbRNUlJquga7/clT/sty/8ABGv/AAQ4Hrdi2bhTv9Jq/RTLp+syWzjeKZP+RImp6Dl1n701OLUyR7Z2716pejeJac1FYrfUqYNHoZStqaSpiem5yon0NTeJVimjc3ihB2pra26WSttSplXorSpWoaBbLqaotGOESqXb1PRfZtzRUTCSLkrf3Q2nI7fP94YosyVD8KqIb/Vnc32y6y2mddz+HxdX0No5zZY0kb1kVg4Yu8xrvWqZOTvJjAAAAAAAAABeKKnSht+xe/vsmqYLYi4iqX+MpqAgqFt9fFc2534VymDDuVCy4UctK9Mo9FT59X1Lmuwpdm21nI6+OWFco9UTKEp00iSwMe1c5ahX7Zvd23vR9HXK7MiplUXnJj0NXcrtzke7xmrjifO2ikr7fXTWyZd6KqJ8uPeYl5g242zJ1cTYgAdFI0AAAAAAAAADHVeTSfCpkMdV5NJ8KlknKpc3mQiys84v+pTbWnpBu/zXFyazzi/6lNtaekG7/NcR7VP53rfhT7ibP8kh54AO6GKAAAAAAAAAAAAZbOuNXWlc80zf+y5DHb8ELv8A1p/0Uzt67upra7olT/suFZpe/WyF+c+IhxXXFFlaSTsRyfUy6c9rTjVfdoVROZxKaEb6NYj65HdDiSDTaEx7NE53apoL27MyJ2Ia3re3JU0a1X+qJCINdWaPUGnJYJGI5Ymq5OHrQn6rhbUU74XfhcmFItvlKtJdZ6RG4jVFT3Gs0sgkt9bDc4Nyoqd/b3GXZp+kjWF3V/BSV8ctPXVUEzd3ckVrUOTedvVgWzapgkpo1SGVN56onA0ZFRyZTih9D2u4x3OiirI+D0yZbkwoABnloAAAAAAOsjUexWLzKdjniEXBUljuddSPfdpbNUORsMbPELF6UrX015ihziJ65VSk+nbpJYr5T1UOUdLIiOVOjJbi0Vzai3UtbC7Lu9tVcdJwPWXbnWq7w3SHc1+M/Lj3mQ1qTRrGvWTW1UcmWrlFOTzNN1KVNqhcrsv3eJ6ZJqads8TZW8FTJC5GLG9Wr1AAHsWAAAAAAAx1Xk0nwqZDHVIq08iJxXdUsk5VLm8UIsrVRLg9V95VrWWz7WNTrG5VtHQb8M0quY7pQtRcqKtdVuc2mkVMr6jDyOv6pJ2HLLBpDXaOV089PFtK/cuUXgi5Jwmw5iIq/UqT4O9efp48HevP08ttySv6pJ2Dklf1STsJb+rF59Wb+1R0cfaneVJ8HevP08eDvXn6eW25JX9Uk7BySv6pJ2D9WLz6s39qjo4+1O8qT4O9efp48HevP08ttySv6pJ2Dklf1STsH6sXn1Zv7VHRx9qd5Unwd68/Tx4O9efp5bbklf1STsHJK/qknYP1YvPqzf2qOjj7U7ypPg715+njwd68/Ty23JK/qknYOSV/VJOwfqxefVm/tUdHH2p3lTqDZzrZLtSzzW/DY3oqr0FmNMxTwWaOKpTdlRqIqHs8kr+qSdh0WiruqSdhFtJ9LbhpFGxlRCjdnhhFLmIxq5R31Pc2fR788jl9SkgmlbOqWoidOs8Lo+PDKG6kp0OiVlqZlMKuf5IveHI6pXANQ1/QIlOlVE3L1dxNvPmuVMyqpHxvTPBcG2vFAlfRvhXiqbjFo51gma8rrta04+/6VqW0sSSVyNxGhX+DZxruONGpblRE95bqe3V0VTKiU0jk3lxwOOSV/VJOwhejum920fpVo44Uc3OfGRVx7EJi5I378p3lSfB3rz9PHg715+nltuSV/VJOwckr+qSdhvv1YvPqzf2qU6OPtTvKk+DvXn6ePB3rz9PLbckr+qSdg5JX9Uk7B+rF59Wb+1R0cfaneVJ8HevP08eDvXn6eW25JX9Uk7BySv6pJ2D9WLz6s39qjo4+1O8qT4O9efp48HevP08ttySv6pJ2Dklf1STsH6sXn1Zv7VHRx9qd5Uh2znXaua77O4tXKE67Fqe/UmnpabUcXepkdiNPcSFySv6pJ2HVaGuVc8kkz+xotItN7hf6PwSpp0RMouUauUwVa2Nq5RU7zYtn1eqVUsErsNRMNN6Inoqe5U9bE+Omlblyb3AlOler4GOVFRcJnJstC6ySSldTyouWLxXsX+iO3mFrZUkavEygAmhpgAAAAAAAADjdb7Kdg3W+ynYcgphBk43W+ynYN1vsp2HIGEK5ON1vsp2Ddb7KdhyBhBk43W+ynYN1vsp2HIGEGTjdb7Kdg3W+ynYcgYQZON1vsp2Ddb7KdhyBhBk43W+ynYN1vsp2HIGEGThEROZEQ5AKlAAADjdb7Kdg3W+ynYcgphCuTjdb7Kdg3W+ynYcgYQZON1vsp2Ddb7KdhyBhBk43W+ynYN1vsp2HIGEGTjdb7Kdg3W+ynYcgYQZON1vsp2Ddb7KdhyBhBk43W+ynYcgDCIUAAKgAAA//2Q==" alt="REC Logo" style="width:40px;height:40px;object-fit:contain;border-radius:6px;">
+    <div class="logo-text" style="font-size:13px;line-height:1.25;letter-spacing:-0.2px">Rajalakshmi<br><span>Engineering College</span></div>
+  </div>
+  <div class="header-right">
+    <div class="status-chip" id="status-chip">
+      <div class="status-dot" id="srv-dot"></div>
+      <span id="srv-status">Connecting</span>
+    </div>
+    <button class="admin-chip" onclick="openAdmin()">Admin</button>
+  </div>
+</header>
+
+<main>
+  <div class="nav-wrap">
+    <nav class="nav">
+      <button class="nav-btn active" onclick="switchTab('register',this)">Register</button>
+      <button class="nav-btn" onclick="switchTab('verify',this)">Verify</button>
+      <button class="nav-btn" onclick="switchTab('users',this)">Users</button>
+      <button class="nav-btn" onclick="switchTab('logs',this)">Logs</button>
+    </nav>
+  </div>
+
+  <!-- REGISTER -->
+  <div id="panel-register" class="panel active">
+    <div class="grid2">
+      <div class="card card-animate">
+        <div class="card-label">Camera Feed</div>
+        <div class="cam-box" id="cam-reg">
+          <video id="vid-reg" autoplay muted playsinline></video>
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <div class="face-oval"></div>
+          <div class="scan-line"></div>
+          <div class="cam-status" id="cs-reg">Standby</div>
+        </div>
+        <canvas id="cv-reg" style="display:none"></canvas>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="startCam('reg')">Start Camera</button>
+          <button class="btn btn-ghost" onclick="stopCam('reg')">Stop</button>
+        </div>
+      </div>
+      <div class="card card-animate">
+        <div class="card-label">Enroll Subject</div>
+        <label class="field-label">Identity Tag</label>
+        <input type="text" id="reg-name" placeholder="e.g. harish">
+        <label class="field-label">Capture Mode</label>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:16px;line-height:1.7">
+          Auto-captures <strong style="color:var(--text2)">3 frames</strong> for robust recognition.
+        </div>
+        <button class="btn btn-primary" id="btn-reg" onclick="captureMulti()">Capture &amp; Enroll</button>
+        <div class="result" id="reg-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERIFY -->
+  <div id="panel-verify" class="panel">
+    <div class="grid2">
+      <div class="card card-animate">
+        <div class="card-label">Biometric Scan</div>
+        <div class="cam-box" id="cam-ver">
+          <video id="vid-ver" autoplay muted playsinline></video>
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <div class="face-oval"></div>
+          <div class="scan-line"></div>
+          <div class="liveness-hud" id="live-hud">
+            <div class="live-ring"><div class="live-eye">👁</div></div>
+            <div class="live-label">Liveness Check</div>
+            <div class="live-sub">Move slightly to continue</div>
+            <div class="live-track"><div class="live-fill" id="live-fill"></div></div>
+          </div>
+          <div class="cam-status" id="cs-ver">Standby</div>
+        </div>
+        <canvas id="cv-ver" style="display:none"></canvas>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="startCam('ver')">Start Camera</button>
+          <button class="btn btn-ghost" onclick="stopCam('ver')">Stop</button>
+        </div>
+      </div>
+      <div class="card card-animate">
+        <div class="card-label">Identity Verification</div>
+        <div class="liveness-info">
+          ⚡ <strong style="color:rgba(255,214,10,0.9)">Liveness + Match Required</strong><br>
+          Step 1 — Click Verify, move slightly<br>
+          Step 2 — System detects live presence<br>
+          Step 3 — Face matched against database
+        </div>
+        <button class="btn btn-primary" id="btn-ver" onclick="startVerify()">Initiate Scan</button>
+        <div class="result" id="ver-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div id="panel-users" class="panel">
+    <div class="card">
+      <div class="section-hdr">
+        <div class="card-label" style="margin:0">Enrolled Subjects</div>
+        <button class="btn btn-ghost" style="width:auto;padding:7px 16px;font-size:12px" onclick="loadUsers()">Refresh</button>
+      </div>
+      <div id="users-wrap"><div class="no-data">Loading database…</div></div>
+    </div>
+  </div>
+
+  <!-- LOGS -->
+  <div id="panel-logs" class="panel">
+    <div class="card">
+      <div class="section-hdr">
+        <div class="card-label" style="margin:0">Access Log</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="width:auto;padding:7px 16px;font-size:12px" onclick="loadLogs()">Refresh</button>
+          <button class="btn btn-danger" onclick="clearLogs()">Clear</button>
+        </div>
+      </div>
+      <div id="logs-wrap"><div class="no-data">Loading logs…</div></div>
+    </div>
+  </div>
+</main>
+
+<!-- Admin modal -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-modal">
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+    <div class="admin-title">Admin Access</div>
+    <label class="field-label">Username</label>
+    <input type="text" id="admin-user" value="admin">
+    <label class="field-label">Password</label>
+    <input type="password" id="admin-pass" placeholder="Enter password">
+    <button class="btn btn-primary" onclick="adminLogin()">Authenticate</button>
+    <div id="admin-err" style="margin-top:10px;font-size:12px;color:var(--red);display:none"></div>
+  </div>
+</div>
+
+<script>
+const BACKEND = "http://localhost:5000";
+const streams = {};
+let livenessFrames = [];
+let sessionId = Math.random().toString(36).slice(2);
+
+// ── Voice ─────────────────────────────────────────────────────────────────────
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.95; utter.pitch = 1.0; utter.volume = 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang.startsWith('en') && v.localService)
+                 || voices.find(v => v.lang.startsWith('en')) || null;
+  if (preferred) utter.voice = preferred;
+  window.speechSynthesis.speak(utter);
+}
+window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+
+// ── Health check ──────────────────────────────────────────────────────────────
+async function checkServer() {
+  const chip = document.getElementById('status-chip');
+  const txt  = document.getElementById('srv-status');
+  try {
+    const r = await fetch(BACKEND+'/api/health', {signal:AbortSignal.timeout(3000)});
+    if (r.ok) { chip.className='status-chip online'; txt.textContent='Online'; }
+    else throw 0;
+  } catch { chip.className='status-chip offline'; txt.textContent='Start Backend'; }
+}
+setInterval(checkServer, 5000);
+checkServer();
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(name, el) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if (name==='users') loadUsers();
+  if (name==='logs')  loadLogs();
+}
+
+// ── Camera ────────────────────────────────────────────────────────────────────
+async function startCam(id) {
+  const vid = document.getElementById('vid-'+id);
+  const cs  = document.getElementById('cs-'+id);
+  try {
+    const s = await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});
+    streams[id] = s; vid.srcObject = s; cs.textContent = 'Live — Position Face';
+  } catch(e) { cs.textContent = 'Camera Denied — Check Permissions'; }
+}
+function stopCam(id) {
+  if (streams[id]) { streams[id].getTracks().forEach(t=>t.stop()); delete streams[id]; }
+  document.getElementById('vid-'+id).srcObject = null;
+  document.getElementById('cs-'+id).textContent = 'Stopped';
+}
+function captureFrame(id) {
+  const vid = document.getElementById('vid-'+id);
+  const cv  = document.getElementById('cv-'+id);
+  if (!vid.srcObject || !vid.videoWidth) return null;
+  cv.width = vid.videoWidth; cv.height = vid.videoHeight;
+  cv.getContext('2d').drawImage(vid, 0, 0);
+  return cv.toDataURL('image/jpeg', .85);
+}
+
+// ── Result helpers ────────────────────────────────────────────────────────────
+function showResult(id, type, title, body, extra='') {
+  const el = document.getElementById(id+'-result');
+  el.className = 'result show '+type;
+  el.innerHTML = `<div class="result-title ${type}">${title}</div><div class="result-body">${body}</div>${extra}`;
+}
+function setBtn(id, loading, label) {
+  const b = document.getElementById(id);
+  b.disabled = loading;
+  b.innerHTML = loading ? `<span class="spin"></span> Processing…` : label;
+}
+
+// ── Register ──────────────────────────────────────────────────────────────────
+async function captureMulti() {
+  const name = document.getElementById('reg-name').value.trim();
+  if (!name) { showResult('reg','fail','Identity Tag Required','Enter a username.'); return; }
+  if (!streams['reg']) { showResult('reg','fail','Camera Offline','Click Start Camera first.'); return; }
+
+  setBtn('btn-reg', true, 'Capture & Enroll');
+  document.getElementById('cam-reg').classList.add('scanning');
+
+  const images = [];
+  for (let i=0; i<3; i++) {
+    const f = captureFrame('reg');
+    if (f) images.push(f);
+    await new Promise(r => setTimeout(r, 100));
+  }
+
+  try {
+    const res  = await fetch(BACKEND+'/api/register', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:name, images})});
+    const data = await res.json();
+    document.getElementById('cam-reg').classList.remove('scanning');
+    if (data.success) showResult('reg','ok','✓ Enrollment Complete', data.message);
+    else              showResult('reg','fail','✗ Enrollment Failed', data.message);
+  } catch(e) {
+    document.getElementById('cam-reg').classList.remove('scanning');
+    showResult('reg','fail','✗ Connection Error','Cannot reach backend at '+BACKEND);
+  }
+  setBtn('btn-reg', false, 'Capture & Enroll');
+}
+
+// ── Verify ────────────────────────────────────────────────────────────────────
+function startVerify() {
+  if (!streams['ver']) { showResult('ver','fail','Camera Offline','Click Start Camera first.'); return; }
+
+  livenessFrames = [];
+  document.getElementById('live-hud').classList.add('show');
+  document.getElementById('live-fill').style.width = '0%';
+  document.getElementById('live-fill').classList.remove('done');
+  setBtn('btn-ver', true, 'Initiate Scan');
+
+  const liveInterval = setInterval(() => {
+    const f = captureFrame('ver');
+    if (f) livenessFrames.push(f);
+  }, 100);
+
+  const start = Date.now();
+  const prog  = setInterval(() => {
+    const p = Math.min(100, (Date.now()-start)/1000*100);
+    document.getElementById('live-fill').style.width = p+'%';
+    if (p >= 100) clearInterval(prog);
+  }, 50);
+
+  setTimeout(async () => {
+    clearInterval(liveInterval);
+    document.getElementById('live-fill').style.width = '100%';
+    document.getElementById('live-fill').classList.add('done');
+    await new Promise(r => setTimeout(r, 150));
+    document.getElementById('live-hud').classList.remove('show');
+    await runVerify();
+  }, 1000);
+}
+
+async function runVerify() {
+  const img = captureFrame('ver');
+  if (!img) { showResult('ver','fail','Frame Lost','Camera feed lost.'); setBtn('btn-ver',false,'Initiate Scan'); return; }
+
+  document.getElementById('cam-ver').classList.add('scanning');
+
+  try {
+    const res  = await fetch(BACKEND+'/api/verify', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({image:img, frames:livenessFrames, session_id:sessionId})});
+    const data = await res.json();
+    document.getElementById('cam-ver').classList.remove('scanning');
+
+    if (!data.success) { showResult('ver','fail','✗ Error', data.message); return; }
+
+    const liveBadge = data.liveness_passed
+      ? `<div class="live-badge ok">👁 Liveness Verified</div>`
+      : `<div class="live-badge fail">⚠ Liveness Failed</div>`;
+
+    if (!data.liveness_passed) {
+      speak("Access denied. Liveness check failed. Please move or blink and try again.");
+      showResult('ver','fail','✗ Access Denied','Liveness check failed — please move or blink slightly.',
+        liveBadge + `<button class="btn btn-ghost" onclick="startVerify()" style="margin-top:12px">↺ Try Again</button>`
+      );
+      return;
+    }
+    if (data.blocked) {
+      speak(`Access denied. User ${data.matched_user} is blocked.`);
+      showResult('ver','fail','⛔ User Blocked', `'${data.matched_user}' is blocked from access.`, liveBadge);
+      return;
+    }
+    if (data.authenticated) {
+      const c   = data.confidence;
+      const cls = c>=80?'high':c>=55?'mid':'low';
+      const p   = data.profile || {};
+      speak(`Access granted. Welcome, ${data.matched_user}. Confidence ${c} percent.`);
+      const profileCard = `
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <div class="profile-avatar-large">${data.matched_user[0].toUpperCase()}</div>
+            <div>
+              <div class="profile-name">${data.matched_user}</div>
+              <div class="profile-sub">${p.department||'—'}${p.year?' · '+p.year:''}</div>
+            </div>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-field"><div class="profile-field-label">Name</div><div class="profile-field-value">${data.matched_user}</div></div>
+            <div class="profile-field"><div class="profile-field-label">Roll No</div><div class="profile-field-value">${p.roll_no||'—'}</div></div>
+            <div class="profile-field" style="grid-column:1/-1"><div class="profile-field-label">Department</div><div class="profile-field-value">${p.department||'—'}</div></div>
+            ${p.extra?`<div class="profile-field" style="grid-column:1/-1"><div class="profile-field-label">Designation</div><div class="profile-field-value">${p.extra}</div></div>`:''}
+          </div>
+        </div>`;
+      showResult('ver','ok',`✓ Access Granted — ${data.matched_user}`,`Confidence: ${c}%`, liveBadge+buildBar(c,cls)+profileCard+buildMatchList(data.all_results));
+    } else {
+      const c = data.closest_confidence||0;
+      speak("Access denied. No matching identity found.");
+      showResult('ver','fail','✗ Access Denied', data.message||'No matching identity.', liveBadge+buildBar(c,'low')+buildMatchList(data.all_results));
+    }
+  } catch(e) {
+    document.getElementById('cam-ver').classList.remove('scanning');
+    showResult('ver','fail','✗ Connection Error','Cannot reach backend at '+BACKEND);
+  }
+  setBtn('btn-ver', false, 'Initiate Scan');
+}
+
+function buildBar(c, cls) {
+  return `<div class="conf-wrap">
+    <div class="conf-row"><span>Match Confidence</span><span>${c}%</span></div>
+    <div class="conf-track-outer">
+      <div class="threshold-tip">Threshold</div>
+      <div class="threshold-line"></div>
+      <div class="conf-track"><div class="conf-fill ${cls}" style="width:${c}%"></div></div>
+    </div></div>`;
+}
+function buildMatchList(results) {
+  if (!results||!results.length) return '';
+  return `<div class="match-list">${results.slice(0,5).map((r,i)=>`
+    <div class="match-item" style="animation-delay:${i*0.05}s">
+      <div class="avatar">${r.username[0].toUpperCase()}</div>
+      <div class="match-name">${r.username}</div>
+      <div class="match-conf">${r.confidence}%</div>
+      <span class="badge ${r.verified||r.confidence>55?'ok':'fail'}">${r.verified||r.confidence>55?'Match':'No Match'}</span>
+    </div>`).join('')}</div>`;
+}
+
+// ── Users ─────────────────────────────────────────────────────────────────────
+async function loadUsers() {
+  const w = document.getElementById('users-wrap');
+  w.innerHTML = '<div class="no-data">Querying database…</div>';
+  try {
+    const r    = await fetch(BACKEND+'/api/users');
+    const data = await r.json();
+    if (!data.users.length) { w.innerHTML='<div class="no-data">No enrolled subjects</div>'; return; }
+    w.innerHTML = `<table class="users-table">
+      <thead><tr><th>Subject</th><th>Images</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>${data.users.map(u=>`
+        <tr>
+          <td><div class="user-cell"><div class="avatar">${u.username[0].toUpperCase()}</div>${u.username}${u.blocked?'<span class="blocked-tag">Blocked</span>':''}</div></td>
+          <td style="color:var(--text3)">${u.images}</td>
+          <td><span class="badge ${u.blocked?'fail':'ok'}">${u.blocked?'Blocked':'Active'}</span></td>
+          <td style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-ghost" style="width:auto;padding:6px 12px;font-size:12px" onclick="toggleProfile('${u.username}')">Profile</button>
+            ${u.blocked
+              ? `<button class="btn btn-warn" onclick="unblockUser('${u.username}')">Unblock</button>`
+              : `<button class="btn btn-warn" onclick="blockUser('${u.username}')">Block</button>`}
+            <button class="btn btn-danger" onclick="deleteUser('${u.username}')">Delete</button>
+          </td>
+        </tr>
+        <tr id="profile-row-${u.username}" style="display:none">
+          <td colspan="4">
+            <div class="profile-editor">
+              <div class="profile-editor-title">Edit Profile — ${u.username}</div>
+              <div class="profile-form-grid">
+                <div><label class="field-label">Roll No</label><input type="text" id="pr-roll-${u.username}" placeholder="e.g. 21BM001"></div>
+                <div><label class="field-label">Department</label><input type="text" id="pr-dept-${u.username}" placeholder="e.g. Biomedical Engg"></div>
+                <div><label class="field-label">Email ID</label><input type="text" id="pr-email-${u.username}" placeholder="e.g. student@rec.ac.in"></div>
+                <div><label class="field-label">Phone No</label><input type="text" id="pr-phone-${u.username}" placeholder="e.g. 9876543210"></div>
+                <div style="grid-column:1/-1"><label class="field-label">Designation</label><input type="text" id="pr-extra-${u.username}" placeholder="e.g. Lab Technician"></div>
+              </div>
+              <button class="btn btn-primary" style="margin-top:12px" onclick="saveProfile('${u.username}')">Save Profile</button>
+              <span id="pr-msg-${u.username}" style="margin-left:10px;font-size:12px;color:var(--green);display:none">✓ Saved</span>
+            </div>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  } catch { w.innerHTML='<div class="no-data">Connection error</div>'; }
+}
+
+async function deleteUser(u) { if(!confirm(`Delete '${u}'?`))return; await fetch(BACKEND+'/api/users/'+encodeURIComponent(u),{method:'DELETE'}); loadUsers(); }
+async function blockUser(u)  { await fetch(BACKEND+'/api/users/'+encodeURIComponent(u)+'/block',{method:'POST'}); loadUsers(); }
+async function unblockUser(u){ await fetch(BACKEND+'/api/users/'+encodeURIComponent(u)+'/unblock',{method:'POST'}); loadUsers(); }
+
+async function toggleProfile(u) {
+  const row = document.getElementById('profile-row-'+u);
+  if (row.style.display === 'none') {
+    row.style.display = 'table-row';
+    try {
+      const r    = await fetch(BACKEND+'/api/users/'+encodeURIComponent(u)+'/profile');
+      const data = await r.json();
+      const p    = data.profile || {};
+      document.getElementById('pr-roll-'+u).value  = p.roll_no    || '';
+      document.getElementById('pr-dept-'+u).value  = p.department || '';
+      document.getElementById('pr-email-'+u).value = p.email      || '';
+      document.getElementById('pr-phone-'+u).value = p.phone      || '';
+      document.getElementById('pr-extra-'+u).value = p.extra      || '';
+    } catch {}
+  } else { row.style.display = 'none'; }
+}
+async function saveProfile(u) {
+  const body = {
+    roll_no:    document.getElementById('pr-roll-'+u).value,
+    department: document.getElementById('pr-dept-'+u).value,
+    email:      document.getElementById('pr-email-'+u).value,
+    phone:      document.getElementById('pr-phone-'+u).value,
+    extra:      document.getElementById('pr-extra-'+u).value
+  };
+  await fetch(BACKEND+'/api/users/'+encodeURIComponent(u)+'/profile', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  const msg = document.getElementById('pr-msg-'+u);
+  msg.style.display = 'inline';
+  setTimeout(() => msg.style.display='none', 2000);
+}
+
+// ── Logs ──────────────────────────────────────────────────────────────────────
+async function loadLogs() {
+  const w = document.getElementById('logs-wrap');
+  w.innerHTML = '<div class="no-data">Loading logs…</div>';
+  try {
+    const r    = await fetch(BACKEND+'/api/logs?limit=100');
+    const data = await r.json();
+    if (!data.logs.length) { w.innerHTML='<div class="no-data">No log entries</div>'; return; }
+    const typeMap = {ACCESS_GRANTED:'GRANT',ACCESS_DENIED:'DENY',BLOCKED:'BLOCK',REGISTER:'REG',DELETE:'DEL',BLOCK:'BLOCK'};
+    w.innerHTML = `<div class="log-list">${data.logs.map((l,i)=>`
+      <div class="log-item" style="animation-delay:${i*0.025}s">
+        <span class="log-type ${typeMap[l.type]||'DENY'}">${l.type}</span>
+        <span class="log-user">${l.user||'—'}</span>
+        ${l.confidence?`<span style="color:var(--text3);font-size:12px">${l.confidence}%</span>`:''}
+        <span class="log-time">${new Date(l.time).toLocaleString()}</span>
+      </div>`).join('')}</div>`;
+  } catch { w.innerHTML='<div class="no-data">Connection error</div>'; }
+}
+async function clearLogs() { if(!confirm('Clear all logs?'))return; await fetch(BACKEND+'/api/logs/clear',{method:'DELETE'}); loadLogs(); }
+
+// ── Admin ─────────────────────────────────────────────────────────────────────
+function openAdmin()  { document.getElementById('admin-overlay').classList.add('show'); }
+function closeAdmin() { document.getElementById('admin-overlay').classList.remove('show'); }
+async function adminLogin() {
+  const u   = document.getElementById('admin-user').value;
+  const p   = document.getElementById('admin-pass').value;
+  const err = document.getElementById('admin-err');
+  try {
+    const r    = await fetch(BACKEND+'/api/admin/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:u, password:p})});
+    const data = await r.json();
+    if (data.success) { closeAdmin(); switchTab('users', document.querySelectorAll('.nav-btn')[2]); }
+    else { err.textContent='Invalid credentials'; err.style.display='block'; }
+  } catch { err.textContent='Connection error'; err.style.display='block'; }
+}
+</script>
+</body>
+</html>

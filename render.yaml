@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: rec-faceauth
+    runtime: docker
+    plan: starter          # $7/month — needed for ML workloads (1GB RAM)
+    dockerfilePath: ./Dockerfile
+    disk:
+      name: faceauth-data
+      mountPath: /app/data  # persistent disk — dataset, logs, profiles survive redeploys
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /app/data
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASS
+        generateValue: true   # Render auto-generates a secure password
+      - key: SECRET_KEY
+        generateValue: true

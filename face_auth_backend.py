@@ -408,4 +408,4 @@ build_embedding_cache()
 print(f"✓ {len(embedding_cache)} user(s) cached | Ready.")
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 7860)))

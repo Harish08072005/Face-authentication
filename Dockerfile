@@ -17,7 +17,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download ArcFace model at build time (so it's baked into the image)
+# Pre-download ArcFace model at build time
 RUN python -c "\
 from deepface import DeepFace; \
 import numpy as np; \
@@ -29,10 +29,11 @@ print('ArcFace model downloaded.')"
 COPY face_auth_backend.py .
 COPY face_auth_frontend.html .
 
-# Persistent storage dirs (mount a volume here on Render)
-RUN mkdir -p dataset
+# Create data dirs
+RUN mkdir -p /app/data/dataset
 
-EXPOSE 5000
+# HuggingFace Spaces requires port 7860
+EXPOSE 7860
 
-# Use gunicorn for production
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--timeout", "120", "face_auth_backend:app"]
+# Run on port 7860
+CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--workers", "1", "--timeout", "120", "face_auth_backend:app"]
